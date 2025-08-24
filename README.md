@@ -1,11 +1,13 @@
 # MERN-Stack Auth Starter
 
-A basic MERN stack skeleton featuring user authentication: login & signup with MongoDB, Express, React, and Node.
+A basic MERN stack skeleton with user authentication: login & signup with MongoDB, Express, React, and Node.
+which I plan to just build my future apps on top of this... MERN is pretty solid ngl....
 
 ---
 
-##  Live Now
-This is the dev version on GitHub — ready to clone and use as your base for other projects. Just swap out the UI or extend functionality as you like.
+##  The reference I followed
+[Login and Registration using MERN Stack | Mongo, Express, React and Node Authentication](https://www.youtube.com/watch?v=ZVyIIyZJutM)
+by: [Code With Yousaf](https://www.youtube.com/@codewithyousaf)
 
 ---
 
