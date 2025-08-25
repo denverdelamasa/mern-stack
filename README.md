@@ -5,9 +5,11 @@ which I plan to just build my future apps on top of this... MERN is pretty solid
 
 ---
 
-##  The reference I followed
-[Login and Registration using MERN Stack | Mongo, Express, React and Node Authentication](https://www.youtube.com/watch?v=ZVyIIyZJutM)
-by: [Code With Yousaf](https://www.youtube.com/@codewithyousaf)
+##  Links
+
+- [Login and Registration using MERN Stack | Mongo, Express, React and Node Authentication](https://www.youtube.com/watch?v=ZVyIIyZJutM)<br />
+  by: [Code With Yousaf](https://www.youtube.com/@codewithyousaf)
+- [MongoDB Community Server Edition](https://www.mongodb.com/try/download/community)
 
 ---
 
