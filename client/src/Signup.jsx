@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -14,12 +15,15 @@ const Signup = () => {
     const [name, setName] = useState()
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('', {name, email, password})
+        axios.post('http://localhost:3001/register', {name, email, password})
         // so ts is like... fetch... so we can see in the browser console if there are errors type shiii???
-        .then(res => console.log(res))
+        .then(res => {console.log(res)
+            navigate('/login');
+        })
         .catch(err => console.log(err))
     }
 
