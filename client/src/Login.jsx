@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+  const navigate = useNavigate()
 
   // so what handleSubmit does is that it prevents the "default" form submission behavior, 
   // which would typically cause a page reload...? what's a default btw... Instead, 
@@ -16,17 +16,21 @@ const Login = () => {
   // looking at my code I realize that I need to literally learn all the four (MERN) technologies...
   // like bro ts is so tuff </3 *rose emoji*
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     axios.post('http://localhost:3001/login', { email, password })
       .then(result => {
-        console.log(res);
+        console.log(result)
         // Handle successful login, e.g., store token, redirect, etc.
-        if (result.data === "Sucsess") {
+        if (result.data === "Success") {
           navigate('/home')
         }
-      navigate('/home'); // Example redirect after login
+        else {
+          alert(result.data) 
+          // Show error message cause the tutorial had none xDDD 
+          // I dowanna look at my browser console everytime I login with wrong credentials
+        }
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
   }
 
 
@@ -37,7 +41,7 @@ const Login = () => {
           <div className="card shadow">
             <div className="card-body p-5">
               <h3 className="card-title text-center mb-4">Login</h3>
-              <form>
+              <form onSubmit={handleSubmit}> {/* I forgot to add this onSubmit code xDDD whoopsies */}
                 <div className="mb-3">
                   <label htmlFor="email" className="form-label">
                     Email address

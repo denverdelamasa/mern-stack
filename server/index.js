@@ -22,12 +22,12 @@ app.post("/login", (req, res) => {
     .then(user => {
         if (user) {
             if (user.password === password) {
-                res.json("Success");
+                res.json("Success")
             } else {
-                res.json("Password is Incorrect");
+                res.json("Password is Incorrect")
             }
         } else {
-            res.json("No record Existed");
+            res.json("No record Existed")
         }
     })
 })

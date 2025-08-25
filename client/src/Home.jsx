@@ -1,3 +1,10 @@
+// TODO: 
+// 1. make it so that when they type /home in the url bar without logging in, it redirects them to /login
+// 2. make a logout button that redirects them to /login and clears any like... store login ??? I guess? 
+// 3. make their name appear on the home page like "Welcome, [name]!"
+// 4. add the most BOMBSHELL navbar type shiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+// 5. I gotta eat lunch bru xDDD
+
 import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
