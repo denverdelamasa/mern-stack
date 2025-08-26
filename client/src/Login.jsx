@@ -8,6 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
   const navigate = useNavigate()
+  axios.defaults.withCredentials = true;
 
   // so what handleSubmit does is that it prevents the "default" form submission behavior, 
   // which would typically cause a page reload...? what's a default btw... Instead, 
@@ -21,8 +22,8 @@ const Login = () => {
       .then(result => {
         console.log(result)
         // Handle successful login, e.g., store token, redirect, etc.
-        if (result.data === "Success") {
-          navigate('/home')
+        if (result.data.Login) {
+          navigate('/')
         }
         else {
           alert(result.data) 
