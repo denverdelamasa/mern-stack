@@ -1,17 +1,10 @@
-// TODO: 
-// DONE 1. make it so that when they type /home in the url bar without logging in, it redirects them to /login
-// 2. make a logout button that redirects them to /login and clears any like... store login ??? I guess? 
-// DONE [email] 3. make their name appear on the home page like "Welcome, [name]!"
-// 4. add the most BOMBSHELL navbar type shiiiiiiiiiiiiiiiiiiiiiiiiiiiii
-// 5. I gotta eat lunch bru xDDD
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Button, Spinner, Navbar, Nav } from 'react-bootstrap';
 
 const Home = () => {
-  const [message, setMessage] = useState('');
+  const [userName, setUserName] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   
@@ -19,7 +12,7 @@ const Home = () => {
     axios.get('http://localhost:3001/', { withCredentials: true })
       .then(res => {
         if(res.data.valid){
-          setMessage(res.data.message);
+          setUserName(res.data.message);
         } else {
           navigate('/login');
         }
@@ -29,9 +22,19 @@ const Home = () => {
         navigate('/login');
       })
       .finally(() => {
-        setLoading(false); // This will run regardless of success or error
+        setLoading(false);
       });
   }, [navigate]);
+
+  const handleLogout = () => {
+    axios.post('http://localhost:3001/logout', {}, { withCredentials: true })
+      .then(res => {
+        navigate('/login');
+      })
+      .catch(err => {
+        console.error('Logout error:', err);
+      });
+  };
 
   if (loading) {
     return (
@@ -44,29 +47,80 @@ const Home = () => {
   }
 
   return (
-    <section className="hero-section bg-primary text-white py-5">
-      <Container>
-        <Row className="align-items-center min-vh-75">
-          <Col lg={6}>
-            <h1 className="display-4 fw-bold mb-4">
-              Welcome, you are: {message}
-            </h1>
-            <p className="lead mb-4">
-              Discover the future of innovation with our cutting-edge solutions. 
-              Join thousands of satisfied users who have transformed their experience.
-            </p>
-            <div className="d-flex gap-3">
-              <Button variant="light" size="lg" className="px-4">
-                Get Started
+    <>
+      <Navbar bg="dark" variant="dark" expand="lg" className="shadow">
+        <Container>
+          <Navbar.Brand href="#home">
+            <strong>MERN Template</strong>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+            </Nav>
+            <Nav>
+              <Navbar.Text className="me-3">
+                Welcome, <strong>{userName}</strong>!
+              </Navbar.Text>
+              <Button variant="outline-light" onClick={handleLogout}>
+                Logout
               </Button>
-              <Button variant="outline-light" size="lg" className="px-4">
-                Learn More
-              </Button>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </section>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <section className="hero-section bg-primary text-white py-5">
+        <Container>
+          <Row className="align-items-center min-vh-75">
+            <Col lg={8} className="mx-auto text-center">
+              <h1 className="display-4 fw-bold mb-4">
+                Welcome, {userName}!
+              </h1>
+              <p className="lead mb-4">
+                This is a basic MERN stack Template with authentication features including login and signup,
+                password hashing using bcrypt, and JWT-based session management.
+              </p>
+              <p className="mb-4">
+                Here is the GitHub link for this project:
+                <br/>
+                <a 
+                  className="text-white fw-bold" 
+                  href="https://github.com/denverdelamasa/mern-stack"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  https://github.com/denverdelamasa/mern-stack
+                </a>
+              </p>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+      <style>
+        {`
+          .hero-section {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+          }
+
+          .feature-box {
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
+            height: 100%;
+          }
+
+          .feature-box:hover {
+            transform: translateY(-5px);
+          }
+
+          .min-vh-75 {
+            min-height: 75vh;
+          }
+        `}
+      </style>
+    </>
   );
 };
 

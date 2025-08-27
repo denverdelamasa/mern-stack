@@ -29,18 +29,48 @@ app.use(cors({
 }))
 app.use(cookieParser());
 
-mongoose.connect("mongodb://127.0.0.1:27017/account");
+mongoose.connect("mongodb://127.0.0.1:27017/account", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => {
+  console.log("MongoDB Connected Successfully");
+})
+.catch((err) => {
+  console.log("MongoDB Connection Error:", err.message);
+  console.log("Make sure MongoDB is running on your system");
+});
 
-app.post("/register", async (req, res) => {
+app.post("/signup", async (req, res) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const user = { ...req.body, password: hashedPassword };
+        const { name, email, password } = req.body;
+        
+        // Check if email already exists :cite[9]
+        const existingUser = await AccountModel.findOne({ email: email });
+        if (existingUser) {
+            return res.status(409).json({ 
+                success: false, 
+                message: "Email already registered" 
+            });
+        }
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = { name, email, password: hashedPassword };
         
         AccountModel.create(user)
-        .then(account => res.status(201).json(account))
-        .catch(err => res.status(400).json({ error: err.message }));
+        .then(account => res.status(201).json({ 
+            success: true, 
+            message: "Account created successfully" 
+        }))
+        .catch(err => res.status(400).json({ 
+            success: false, 
+            error: err.message 
+        }));
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ 
+            success: false, 
+            error: error.message 
+        });
     }
 });
 
@@ -48,10 +78,9 @@ app.post("/login", (req, res) => {
     const { email, password } = req.body;
     
     AccountModel.findOne({ email: email })
-    .then(async (user) => { // Make the callback async
+    .then(async (user) => {
         if (user) {
             try {
-                // Compare provided password with stored hash
                 const isPasswordValid = await bcrypt.compare(password, user.password);
                 
                 if (isPasswordValid) {
@@ -73,21 +102,36 @@ app.post("/login", (req, res) => {
                         sameSite: 'strict'
                     });
                     
-                    return res.json({Login: true});
+                    return res.json({
+                        success: true,
+                        message: "Login successful"
+                    });
                 } else {
-                    res.status(401).json({Login: false, Message: "Password is Incorrect"});
+                    res.status(401).json({
+                        success: false,
+                        message: "Invalid password"
+                    });
                 }
             } catch (error) {
                 console.error("Password comparison error:", error);
-                res.status(500).json({Login: false, Message: "Server error"});
+                res.status(500).json({
+                    success: false,
+                    message: "Server error during login"
+                });
             }
         } else {
-            res.status(404).json({Login: false, Message: "No account found with this email"});
+            res.status(404).json({
+                success: false,
+                message: "No account found with this email"
+            });
         }
     })
     .catch(err => {
         console.error("Login error:", err);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ 
+            success: false,
+            message: "Server error" 
+        });
     });
 });
 
@@ -144,9 +188,16 @@ const renewToken = (req, res, next) => {
     }
 };
 
-app.get('/', verifyUser, (req, res) => {
+
+app.get('/', verifyUser, async (req, res) => {
     try {
-        return res.json({ valid: true, message: req.email });
+        // Find the user by email to get their name
+        const user = await AccountModel.findOne({ email: req.email });
+        if (user) {
+            return res.json({ valid: true, message: user.name });
+        } else {
+            return res.status(404).json({ valid: false, message: "User not found" });
+        }
     } catch (error) {
         console.error("Error in / route:", error);
         return res.status(500).json({ valid: false, message: "Server error" });
@@ -157,6 +208,13 @@ app.get('/', verifyUser, (req, res) => {
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong!' });
+});
+
+app.post('/logout', (req, res) => {
+  // Clear the authentication cookies
+  res.clearCookie('accessToken');
+  res.clearCookie('refreshToken');
+  return res.json({ success: true, message: 'Logged out successfully' });
 });
 
 app.listen(3001, () => {
