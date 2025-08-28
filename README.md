@@ -1,183 +1,129 @@
-# MERN Stack Authentication Starter
+# MERN Stack Authentication Template
 
-A robust, production-ready foundation for MERN stack applications with built-in authentication system. This starter template provides a clean architecture for building scalable web applications with MongoDB, Express.js, React, and Node.js.
-
-## Overview
-
-This project serves as a solid foundation for developers looking to build full-stack applications with user authentication. It implements industry best practices for security and code organization, making it ideal for:
-
-- Learning MERN stack development
-- University capstone projects
-- Rapid prototyping
-- Production applications
-
-## Features
-
-- **User Authentication**: Complete login/registration system with secure password hashing
-- **JWT Support**: JSON Web Token implementation for session management
-- **React Frontend**: Modern React implementation with Bootstrap UI
-- **Express Backend**: RESTful API with proper middleware structure
-- **MongoDB Integration**: Mongoose ODM with optimized schemas
-- **Security**: Password encryption, CORS configuration, and environment variable protection
-
-## Prerequisites
-
-Before using this template, ensure you have the following installed:
-
-- Node.js (v14 or higher)
-- MongoDB (v4.4 or higher)
-- npm or yarn package manager
-
-## Installation & Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd mern-auth-starter
-   ```
-
-2. **Install server dependencies**
-   ```bash
-   cd server
-   npm install
-   ```
-
-3. **Install client dependencies**
-   ```bash
-   cd ../client
-   npm install
-   ```
-
-4. **Environment Configuration**
-   - Create a `.env` file in the server directory:
-   ```
-   PORT=5000
-   MONGODB_URI=mongodb://localhost:27017/your-database-name
-   JWT_SECRET=your-super-secret-jwt-key
-   NODE_ENV=development
-   ```
-
-5. **Database Setup**
-   - Install MongoDB Community Edition
-   - Start MongoDB service:
-   ```bash
-   mongod
-   ```
-
-6. **Start the Application**
-   - Run the backend server:
-   ```bash
-   cd server
-   npm run dev
-   ```
-   
-   - In a new terminal, run the frontend:
-   ```bash
-   cd client
-   npm start
-   ```
-
-7. **Access the Application**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:5000
-
-## Project Structure
-
-```
-mern-auth-starter/
-├── client/                 # React frontend application
-│   ├── public/            # Static assets
-│   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   ├── pages/         # Page components (Login, Signup, Dashboard)
-│   │   ├── services/      # API communication handlers
-│   │   └── styles/        # CSS and styling files
-│   └── package.json       # Frontend dependencies
-│
-├── server/                # Express backend application
-│   ├── config/            # Database and app configuration
-│   ├── controllers/       # Route controllers
-│   ├── middleware/        # Custom middleware (auth, validation)
-│   ├── models/            # MongoDB models
-│   ├── routes/            # API route definitions
-│   └── package.json       # Backend dependencies
-│
-└── README.md              # Project documentation
-```
-
-## Available Scripts
-
-### Server Scripts
-- `npm run dev` - Start development server with nodemon
-- `npm start` - Start production server
-- `npm test` - Run test suite
-
-### Client Scripts
-- `npm start` - Start development server
-- `npm build` - Create production build
-- `npm test` - Launch test runner
-
-## Learning Resources
-
-This project was inspired by:
-- [Login and Registration using MERN Stack](https://www.youtube.com/watch?v=ZVyIIyZJutM) by Code With Yousaf
-- [MongoDB Community Server Edition](https://www.mongodb.com/try/download/community)
-
-## Customization Guide
-
-### Adding New Routes
-1. Create new controller functions in `server/controllers/`
-2. Define routes in `server/routes/`
-3. Import and use routes in `server/index.js`
-
-### Styling Modifications
-- Bootstrap classes are used throughout the frontend
-- Custom CSS can be added in `client/src/styles/`
-
-### Database Schema Changes
-- Modify models in `server/models/`
-- Changes will automatically reflect through Mongoose
-
-## Security Considerations
-
-- Change the default JWT secret in production
-- Implement rate limiting for authentication endpoints
-- Add input validation and sanitization
-- Use HTTPS in production environments
-- Implement proper CORS policies for your domain
-
-## Troubleshooting
-
-Common issues and solutions:
-
-1. **Connection refused to MongoDB**
-   - Ensure MongoDB service is running
-   - Verify connection string in `.env` file
-
-2. **CORS errors**
-   - Check backend CORS configuration in `server/index.js`
-
-3. **Invalid JWT token**
-   - Verify token expiration settings
-   - Check secret key consistency
-
-## Contributing
-
-This project welcomes contributions and improvements. Please feel free to:
-- Report bugs and issues
-- Suggest new features
-- Submit pull requests
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Support
-
-For questions and support:
-- Create an issue in the GitHub repository
-- Reference the tutorial video for basic setup questions
+A simple **MERN (MongoDB, Express, React, Node.js)** starter project with authentication. This template provides the essential building blocks for a login/signup system so you can quickly build and expand into a full application.
 
 ---
 
-**Happy Coding!** This template provides everything you need to start building your MERN stack applications with confidence.
+## 🚀 Features
+
+* 🔐 User authentication (signup & login)
+* 🛡️ Password hashing with **bcrypt**
+* 📦 Backend API built with **Express** & **MongoDB**
+* ⚛️ Frontend with **React** & **Vite**
+* 📡 API requests handled via **Axios**
+* 🔄 Ready-to-extend template for dashboards, CRUD apps, and more
+
+---
+
+## 📂 Project Structure
+
+```
+client/                  # React frontend
+  public/
+  src/
+    App.jsx              # App entry, routing setup
+    Home.jsx             # Example protected page
+    Login.jsx            # Login form
+    Signup.jsx           # Signup form
+    main.jsx             # React root entry
+  package.json           # Client dependencies
+
+server/                  # Express backend
+  models/
+    Account.js           # MongoDB user schema
+  index.js               # Express app & routes
+  package.json           # Server dependencies
+
+README.md                # Project documentation
+```
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/denverdelamasa/mern-stack.git
+cd mern-stack
+```
+
+### 2. Install dependencies
+
+#### Backend
+
+```bash
+cd server
+npm install
+```
+
+#### Frontend
+
+```bash
+cd ../client
+npm install
+```
+
+### 3. Setup environment variables
+
+In `server/`, create a `.env` file:
+
+```env
+MONGO_URI=your_mongodb_connection_string
+PORT=3001
+JWT_SECRET=your_secret_key
+```
+
+### 4. Run the development servers
+
+#### Start backend
+
+```bash
+cd server
+npm start
+```
+
+#### Start frontend
+
+```bash
+cd client
+npm run dev
+```
+
+Frontend runs on **[http://localhost:5173](http://localhost:5173)** and backend on **[http://localhost:3001](http://localhost:3001)** (by default).
+
+---
+
+## 🖼️ Usage
+
+* Go to **[http://localhost:5173](http://localhost:5173)**
+* Sign up for a new account
+* Log in with your credentials
+* After login, you’ll be redirected to the `Home` page (example protected route)
+
+---
+
+### 🛠 Troubleshooting
+
+**MongoDB Permission Issues on Windows**  
+Some users may encounter an error when trying to start MongoDB due to **permission issues** if it’s installed inside `C:/Program Files`.
+
+**Fix:**
+
+1. Uninstall MongoDB.  
+2. Reinstall it directly in `C:/` (e.g., `C:/MongoDB/`) instead of `C:/Program Files/`.  
+3. Make sure the `mongod` service points to the new installation path.  
+
+This avoids Windows permission conflicts and ensures MongoDB runs correctly.
+
+---
+
+## 🤝 Contributing
+
+This is meant to be a starter template. Feel free to fork and adapt for your own projects. Contributions are welcome via pull requests!
+
+---
+
+## 📄 License
+
+This project is open-source and available under the **MIT License**.

@@ -9,7 +9,7 @@ const Signup = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false); // Add this state
+    const [showPassword, setShowPassword] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertVariant, setAlertVariant] = useState('danger');
@@ -37,7 +37,6 @@ const Signup = () => {
         });
     };
 
-    // Add this function to toggle password visibility
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -91,7 +90,7 @@ const Signup = () => {
                                     </label>
                                     <div className="input-group">
                                         <input
-                                            type={showPassword ? 'text' : 'password'} // Toggle type based on state
+                                            type={showPassword ? 'text' : 'password'}
                                             className="form-control"
                                             id="password"
                                             name="password"
@@ -102,7 +101,7 @@ const Signup = () => {
                                         <button
                                             type="button"
                                             className="btn btn-outline-secondary"
-                                            onClick={togglePasswordVisibility} // Add toggle button
+                                            onClick={togglePasswordVisibility}
                                         >
                                         {showPassword ? (
                                             <i className="bi bi-eye-slash"></i>

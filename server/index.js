@@ -1,5 +1,7 @@
+require('dotenv').config(); // import our env variables, "the tokens"??? duh???
+
 const express = require("express");
-const mongoose = require('mongoose'); // YOOO WHAT THE CORRECT ONE IS 'mongoose' NOT "mongoose" ?!?!?!? why?!??!?!?!
+const mongoose = require('mongoose');
 const cors = require("cors");
 const AccountModel = require("./models/Account");
 
@@ -15,12 +17,6 @@ const bcrypt = require("bcrypt");
 // and cookie-parser for cookies
 // also bcrypt for hashing passwords
 
-
-// like bro why would you name em employees just name em accounts bruh
-// Employee == Account
-// also I've realized I'm using MongoDB compass instead of the server edition xDDD whoopsies.... 
-// well tbf I'm not using AI so yeaahhh... I got autocomplete tho
-
 const app = express()
 app.use(express.json())
 app.use(cors({
@@ -29,10 +25,11 @@ app.use(cors({
 }))
 app.use(cookieParser());
 
-mongoose.connect("mongodb://127.0.0.1:27017/account", {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
+
 .then(() => {
   console.log("MongoDB Connected Successfully");
 })
@@ -44,8 +41,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/account", {
 app.post("/signup", async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        
-        // Check if email already exists :cite[9]
         const existingUser = await AccountModel.findOne({ email: email });
         if (existingUser) {
             return res.status(409).json({ 
@@ -84,9 +79,8 @@ app.post("/login", (req, res) => {
                 const isPasswordValid = await bcrypt.compare(password, user.password);
                 
                 if (isPasswordValid) {
-                    // Password is correct - create tokens
-                    const accessToken = jwt.sign({email: email}, "jwt-access-SecretKey", {expiresIn: '1h'});
-                    const refreshToken = jwt.sign({email: email}, "jwt-refresh-SecretKey", {expiresIn: '7d'});
+                    const accessToken = jwt.sign({email: email}, process.env.JWT_ACCESS_SECRET, {expiresIn: '1h'});
+                    const refreshToken = jwt.sign({email: email}, process.env.JWT_ACCESS_SECRET, {expiresIn: '7d'});
                     
                     res.cookie('accessToken', accessToken, {
                         maxAge: 3600000,
@@ -141,7 +135,7 @@ const verifyUser = (req, res, next) => {
         if (!accessToken) {
             return renewToken(req, res, next);
         } else {
-            jwt.verify(accessToken, "jwt-access-SecretKey", (err, decoded) => {
+            jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
                 if (err) {
                     console.log("Access token invalid:", err.message);
                     return renewToken(req, res, next);
@@ -164,20 +158,18 @@ const renewToken = (req, res, next) => {
             return res.status(401).json({ valid: false, message: "No refresh token" });
         }
         
-        jwt.verify(refreshToken, "jwt-refresh-SecretKey", (err, decoded) => {
+        jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
             if (err) {
                 console.log("Refresh token invalid:", err.message);
                 return res.status(401).json({ valid: false, message: "Invalid refresh token" });
             } else {
-                const accessToken = jwt.sign({ email: decoded.email }, "jwt-access-SecretKey", { expiresIn: '1h' });
+                const accessToken = jwt.sign({ email: decoded.email }, process.env.JWT_ACCESS_SECRET, { expiresIn: '1h' });
                 res.cookie('accessToken', accessToken, { 
                     maxAge: 3600000,
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
                     sameSite: 'strict'
                 });
-                
-                // Set the email in the request for the next middleware
                 req.email = decoded.email;
                 next();
             }
@@ -191,7 +183,6 @@ const renewToken = (req, res, next) => {
 
 app.get('/', verifyUser, async (req, res) => {
     try {
-        // Find the user by email to get their name
         const user = await AccountModel.findOne({ email: req.email });
         if (user) {
             return res.json({ valid: true, message: user.name });
@@ -204,20 +195,18 @@ app.get('/', verifyUser, async (req, res) => {
     }
 });
 
-// Centralized error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong!' });
 });
 
 app.post('/logout', (req, res) => {
-  // Clear the authentication cookies
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
   return res.json({ success: true, message: 'Logged out successfully' });
 });
 
-app.listen(3001, () => {
+app.listen(process.env.PORT, () => {
     console.log(`
 █▀ █▀▀ █▀█ █░█ █▀▀ █▀█   █ █▀   █▀█ █░█ █▄░█ █▄░█ █ █▄░█ █▀▀
 ▄█ ██▄ █▀▄ ▀▄▀ ██▄ █▀▄   █ ▄█   █▀▄ █▄█ █░▀█ █░▀█ █ █░▀█ █▄█
