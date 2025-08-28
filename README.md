@@ -118,6 +118,19 @@ This avoids Windows permission conflicts and ensures MongoDB runs correctly.
 
 ---
 
+## Environment Variables
+
+Create a `.env` file in the **backend** directory with the following keys:
+
+```env
+PORT=3001
+MONGO_URI=mongodb://127.0.0.1:27017/account
+JWT_ACCESS_SECRET=supersecret-access-key
+JWT_REFRESH_SECRET=supersecret-refresh-key
+
+
+---
+
 ## 🤝 Contributing
 
 This is meant to be a starter template. Feel free to fork and adapt for your own projects. Contributions are welcome via pull requests!
