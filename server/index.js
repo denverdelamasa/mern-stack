@@ -10,17 +10,10 @@ const cookieParser = require('cookie-parser');
 
 const bcrypt = require("bcrypt");
 
-
-// adding JWT cookie-parser and bcrypt
-
-// adding JWT for authentication
-// and cookie-parser for cookies
-// also bcrypt for hashing passwords
-
 const app = express()
 app.use(express.json())
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: [process.env.FRONTEND_PORT],
     credentials: true
 }))
 app.use(cookieParser());
@@ -204,7 +197,7 @@ app.post('/logout', (req, res) => {
   return res.json({ success: true, message: 'Logged out successfully' });
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.BACKEND_PORT, () => {
     console.log(`
 █▀ █▀▀ █▀█ █░█ █▀▀ █▀█   █ █▀   █▀█ █░█ █▄░█ █▄░█ █ █▄░█ █▀▀
 ▄█ ██▄ █▀▄ ▀▄▀ ██▄ █▀▄   █ ▄█   █▀▄ █▄█ █░▀█ █░▀█ █ █░▀█ █▄█
