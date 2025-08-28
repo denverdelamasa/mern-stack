@@ -25,14 +25,12 @@ app.use(cors({
 }))
 app.use(cookieParser());
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-
+/* useNewUrlParser: true, useUnifiedTopology: true  <-------- these are no longer needed starting MongoDB Node driver v4+ */
+mongoose.connect(process.env.MONGO_URI)
 .then(() => {
   console.log("MongoDB Connected Successfully");
 })
+
 .catch((err) => {
   console.log("MongoDB Connection Error:", err.message);
   console.log("Make sure MongoDB is running on your system");
